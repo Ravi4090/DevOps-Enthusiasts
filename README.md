@@ -1,2 +1,7 @@
 # DevopsStudy
 DevopsStudy
+
+Waterfall 
+
+Agile.
+
