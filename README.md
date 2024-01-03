@@ -1,7 +1,2 @@
 # DevopsStudy
-DevopsStudy
-
-Waterfall 
-
-Agile.
 
