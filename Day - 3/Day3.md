@@ -265,3 +265,18 @@ Consider an e-commerce website preparing for a flash sale. The website expects a
 Scaling is crucial for ensuring that systems can handle growth in users, data, or transactions without compromising performance or reliability. It is a fundamental aspect of designing robust and scalable architectures, especially in the context of cloud-based and distributed systems.
 
 
+
+
+# Resources
+
+Here are some valuable resources for DevOps interview questions: or Basic Idea of Devops
+
+1. [Intellipaat DevOps Interview Questions](https://intellipaat.com/blog/interview-question/devops-interview-questions/)
+
+2. [Forage DevOps Interview Questions with Answers](https://www.theforage.com/blog/interview-questions/devops-interview-questions-with-answers)
+
+3. [InterviewBit DevOps Interview Questions](https://www.interviewbit.com/devops-interview-questions/)
+
+Additionally, you might find this YouTube video helpful:
+- [What is Devops - YouTube](https://youtu.be/h7LDnVsNRVI?si=y6A9BseYe23osVW9)
+
