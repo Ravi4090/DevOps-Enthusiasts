@@ -1,0 +1,22 @@
+|-------------|-------|-------|-----------|------|------------------|------|
+| Permissions | Links | Owner | Group     | Size | Modified         | Name |
+|-------------|-------|-------|-----------|------|------------------|------|
+| drwxr-xr-x  | 1     | User  | UsersGrp  | 0    | Jan 8 11:59      | .    |
+| rwx------   | 1     | User  | UsersGrp  | 0    | Jan 8 11:58      | ..   |
+| drwxr-xr-x  | 1     | User  | UsersGrp  | 0    | Jan 8 11:59      | a    |
+| ----------  | 1     | Joel  | UsersGrp  | 0    | Jan 8 11:58      | f2   |
+| -rwxrwxrwx  | 1     | User  | UsersGrp  | 0    | Jan 8 11:58      | f3   |
+| -rw-r--r--  | 1     | User  | UsersGrp  | 0    | Jan 8 11:58      | f4   |
+| -rw-r--r--  | 1     | Ravi  | UsersGrp  | 0    | Jan 8 11:58      | f5   |
+| -rw-r--r--  | 1     | User  | UsersGrp  | 0    | Jan 8 11:58      | f6   |
+| -rw-r--r--  | 1     | User  | UsersGrp  | 0    | Jan 8 11:58      | ff1  |
+|-------------|-------|-------|-----------|------|------------------|------|
+
+
+Permissions: The file/directory permissions.
+Links: The number of hard links.
+Owner: The owner of the file/directory.
+Group: The group associated with the file/directory.
+Size: The size of the file/directory.
+Modified: The last modification time.
+Name: The name of the file/directory.
