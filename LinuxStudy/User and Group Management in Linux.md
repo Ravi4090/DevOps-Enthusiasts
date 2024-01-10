@@ -249,10 +249,3 @@ Users are advised to periodically update their passwords to enhance security. Th
 ```
 
 Executing this command initiates a prompt for John to input his existing password and subsequently empowers him to establish a new, robust password. This proactive approach to password management contributes significantly to reinforcing the overall security posture of the system.
-
-
-
-
-**Password Aging**
-
-************* Still Working on it ****************
