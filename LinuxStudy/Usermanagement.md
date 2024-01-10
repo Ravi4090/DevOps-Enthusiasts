@@ -67,6 +67,10 @@ Performing administrative tasks requires root access. Use `sudo` before each com
 
 ----
 
+
+
+
+-----
 # Modifying User Attributes with `usermod` Command
 
 To modify a user's attributes such as the initial login group, default shell, user comment, home directory, you can use the `usermod` command. Here's how you can do it with practical examples:
