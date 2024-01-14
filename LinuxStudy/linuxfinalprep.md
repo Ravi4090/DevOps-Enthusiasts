@@ -1,3 +1,4 @@
+
 | S.No | Command                   | Syntax                                         | Description                                     | Example                                              |
 |------|---------------------------|------------------------------------------------|-------------------------------------------------|------------------------------------------------------|
 | 1    | `mkdir`                   | `mkdir [directory_name]`                       | Create a new directory.                         | `mkdir new_directory`                                |
@@ -30,9 +31,7 @@
 | 28   | `uname`                   | `uname [options]`                             | Display system information.                   | `uname -a`                                           |
 | 29   | `whoami`                  | `whoami`                                      | Display the current username.                 | `whoami`                                             |
 | 30   | `apropos`                 | `apropos [keyword]`                           | Search the manual page names and descriptions.| `apropos search_term`                                |
-| 31   | `ip`                      | `ip [options] [object]`                       | Show or manipulate routing, devices, policy routing and tunnels. | `ip address show`                                |
 | 32   | `netstat`                 | `netstat [options]`                           | Display network connections and routing tables. | `netstat -an`                                      |
-| 33   | `ss`                      | `ss [options]`                                | Display socket statistics.                    | `ss -t`                                             |
 | 34   | `ps`                      | `ps [options]`                                | Display information about a selection of the active processes. | `ps aux`                                           |
 | 35   | `who`                     | `who [options]`                              | Show who is logged on.                        | `who`                                               |
 | 36   | `env`                     | `env`                                         | Display environment variables.                | `env`                                               |
@@ -41,24 +40,20 @@
 | 39   | `lsof`                    | `lsof [options] [file]`                      | List open files.                            | `lsof /var/log/syslog`                               |
 | 40   | `lspci`                   | `lspci [options]`                            | List all PCI devices.                       | `lspci`                                             |
 | 41   | `wget`                    | `wget [options] [URL]`                       | Download files from the web.                | `wget http://example.com/file.zip`                   |
-| 42   | `curl`                    | `curl [options] [URL]`                       | Transfer data with URLs.                    | `curl -O http://example.com/file.txt`               |
 | 43   | `tee`                     | `tee [options] [file]`                       | Redirect output to multiple files.         | `echo "Hello" | tee output.txt`                            |
 | 44   | `cut`                     | `cut [options] [file]`                       | Remove sections from each line of a file.  | `cut -d',' -f2 data.csv`                              |
 | 45   | `awk`                     | `awk [options] 'pattern { action }' [file]` | A versatile programming language for text processing. | `awk '/pattern/ {print $1}' data.txt`              |
 | 46   | `sed`                     | `sed [options] 'script' [file]`              | Stream editor for filtering and transforming text. | `sed 's/old/new/g' file.txt`                        |
 | 47   | `chown`                   | `chown [options] [user:group] [file]`       | Change file owner and group.                | `chown user:group file.txt`                         |
-| 48   | `finger`                  | `finger [user]`                              | Display user information.                   | `finger username`                                   |
-| 49   | `df`                      | `df [options] [file]`                        | Report file system disk space usage.       | `df -h`                                             |
-| 50   | `du`                      | `du [options] [directory]`                   | Estimate file space usage.                  | `du -sh /path/to/directory`                         |
-| 51   | `free`                    | `free [options]`                             | Display amount of free and used memory in the system. | `free -h`                                       |
-| 52   | `top`                     | `top`                                        | Display and update sorted information about system processes. | `top`                                        |
-| 53   | `tar`                     | `tar [options] [file or directory]`         | Create, list, extract files from an archive. | `tar -cvf archive.tar.gz source_directory`          |
-| 54   | `dig`                     | `dig [options] [domain]`                     | DNS lookup utility.                        | `dig example.com`                                   |
+| 48   | `df`                      | `df [options] [file]`                        | Report file system disk space usage.       | `df -h`                                             |
+| 49   | `du`                      | `du [options] [directory]`                   | Estimate file space usage.                  | `du -sh /path/to/directory`                         |
+| 50   | `free`                    | `free [options]`                             | Display amount of free and used memory in the system. | `free -h`                                       |
+| 51   | `top`                     | `top`                                        | Display and update sorted information about system processes. | `top`                                        |
+| 52   | `tar`                     | `tar [options] [file or directory]`         | Create, list, extract files from an archive. | `tar -cvf archive.tar.gz source_directory`          |
 | 55   | `exit`                    | `exit`                                       | Exit the current shell session.             | `exit`                                              |
 | 56   | `date`                    | `date [options]`                            | Display or set the date and time.           | `date`                                              |
 | 57   | `cal`                     | `cal [options]`                             | Display a calendar.                        | `cal`                                               |
 | 58   | `uptime`                  | `uptime`                                    | Display how long the system has been running. | `uptime`                                          |
 | 59   | `cat /proc/cpuinfo`       | `cat /proc/cpuinfo`                         | Display detailed CPU information.          | `cat /proc/cpuinfo`                                |
-| 60   | `cat /proc/meminfo`       | `cat /proc/meminfo`                         | Display information about system memory.   | `cat /proc/meminfo`                                |
-
-
+| 60   | `cat /proc/meminfo`       | `cat /proc/meminfo`                         | Display information about system memory.   | `cat /proc/meminfo`                                 |
+| 61   | `chmod`                   | `chmod [options] mode file`                  | Change file mode (permissions).             | `chmod 755 script.sh`                               |
