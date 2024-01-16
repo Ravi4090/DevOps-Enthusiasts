@@ -71,37 +71,28 @@
 - It provides a structure for naming, storing, and retrieving files.
 - Manages data storage, retrieval, and access by the operating system and applications.
 
-## DF COMMAND
+## 7. DF COMMAND
 
 - **`df` - Disk Free:**
   - Displays disk space information.
   - Options like `-h` provide human-readable sizes.
   - Helps check available space, usage percentages, and filesystem details.
 
-## DU COMMAND
+## 8. DU COMMAND
 
 - **`du` - Disk Usage:**
   - Estimates file space usage for files and directories.
   - Options like `-h` provide human-readable sizes.
   - Useful for determining disk space usage in specific locations.
 
-## FREE COMMAND (RAM)
+## 9. FREE COMMAND (RAM)
 
 - **`free` - Display Amount of Free and Used Memory:**
   - Shows information about free and used physical and swap memory.
   - Options like `-m` display values in megabytes.
   - Monitors system memory usage.
 
-------
-
------
-
-
-
-
-
-
-# Grep Command Overview
+## 10.  Grep Command 
 
 Let's explore each of the `grep` options you mentioned with detailed explanations and examples using a sample file. Assume we have a file named `sample.txt` with the following content:
 
@@ -297,7 +288,7 @@ grep -w "a" sample.txt
 
 
 
-# Byte-by-Byte Comparison with `cmp` Command
+## 11. Byte-by-Byte Comparison with `cmp` Command
 
 Let's break down the byte-by-byte comparison for the provided files:
 
@@ -360,6 +351,221 @@ G
   - The content at byte 5 in `cmpone.txt` is "C," while in `cmptwo.txt` it is "M."
   - The difference is detected in line 3 of the files.
 
-This breakdown shows the comparison at each byte position and identifies where the first difference occurs (byte 5) in line 3 of the files.
+This breakdown shows the comparison at each byte position and identifies where the first difference occurs (byte 5) in line 3 of the files.!
 
-If you have further questions or need more clarification, feel free to ask!
+---------------------
+
+
+
+
+## 12. Introduction to `sed` (Stream Editor)
+
+The `sed` command (stream editor) is a powerful tool for text stream processing. It is often used for non-interactive text transformations, such as search and replace, deletion, insertion, and more.
+
+## `sed` Command Syntax:
+
+```bash
+sed OPTIONS... [SCRIPT] [INPUTFILE...]
+```
+
+Some common `sed` commands include:
+
+- `s/old/new/g`: Substitutes all occurrences of "old" with "new" in each line.
+- `d`: Deletes lines.
+- `p`: Prints lines.
+- `i`: Inserts text before a line.
+- `a`: Appends text after a line.
+
+Now, let's demonstrate a basic usage of `sed`.
+
+Suppose you have a file named `example.txt` with the following content:
+
+```plaintext
+Hello, World!
+This is a demonstration.
+```
+
+You can use `sed` to replace "Hello" with "Hi" and print the modified content:
+
+```bash
+sed 's/Hello/Hi/' example.txt
+```
+
+**Explanation:**
+
+- `s/Hello/Hi/`: Substitutes "Hello" with "Hi".
+- `example.txt`: Input file.
+
+**Output:**
+```plaintext
+Hi, World!
+This is a demonstration.
+```
+
+This basic example showcases how `sed` can be used for simple text transformations. The `sed` command provides a flexible and efficient way to process text streams in a variety of scenarios.
+
+---------------
+
+# `sed` Examples
+
+Let's go through each `sed` example in detail.
+
+## 1. Search and Replace:
+
+```bash
+sed 's/Hello/Hi/' example.txt
+```
+
+- `s/Hello/Hi/`: This is the substitution command in `sed`. It searches for the pattern "Hello" and replaces it with "Hi".
+- `example.txt`: This is the input file.
+
+**Output:**
+```plaintext
+Hi, World!
+This is a demonstration.
+```
+
+## 2. Delete Lines:
+
+```bash
+sed '/This/d' example.txt
+```
+
+- `/This/`: This is a pattern to match lines containing the word "This".
+- `d`: This is the delete command. It deletes lines that match the specified pattern.
+
+**Output:**
+```plaintext
+Hello, World!
+```
+
+## 3. Print Specific Lines:
+
+```bash
+sed -n '2p' example.txt
+```
+
+- `-n`: This option suppresses the default output, and only lines explicitly selected for printing are displayed.
+- `2p`: This command prints the second line.
+
+**Output:**
+```plaintext
+This is a demonstration.
+```
+
+## 4. Insert Text:
+
+```bash
+sed '2i\Inserted Line' example.txt
+```
+
+- `2i\`: This command inserts text before the specified line number (line 2 in this case).
+- `Inserted Line`: This is the text to be inserted.
+
+**Output:**
+```plaintext
+Hello, World!
+Inserted Line
+This is a demonstration.
+```
+
+## 5. Append Text:
+
+```bash
+sed '2a\Appended Line' example.txt
+```
+
+- `2a\`: This command appends text after the specified line number (line 2 in this case).
+- `Appended Line`: This is the text to be appended.
+
+**Output:**
+```plaintext
+Hello, World!
+This is a demonstration.
+Appended Line
+```
+
+These `sed` commands demonstrate basic text transformations, including search and replace, line deletion, printing specific lines, inserting text, and appending text. Each command performs a specific action on the input file, showcasing the flexibility and power of the `sed` tool for text processing.
+
+
+----------------------
+
+
+
+
+## 13. `diff` Command in Linux
+
+The `diff` command in Linux is used to compare the contents of two text files line by line and display the differences. Below are some important options of the `diff` command explained with a simple example:
+
+## Example Files:
+Let's consider two text files: `file1.txt` and `file2.txt`.
+
+**`file1.txt`:**
+```plaintext
+This is line 1.
+This is line 2.
+This is line 3.
+```
+
+**`file2.txt`:**
+```plaintext
+This is line 1.
+This is a modified line.
+This is line 3.
+```
+
+## 1. Basic Usage:
+```bash
+diff file1.txt file2.txt
+```
+
+**Output:**
+```plaintext
+2c2
+< This is line 2.
+---
+> This is a modified line.
+```
+
+**Explanation:**
+- `2c2`: Indicates a change in the second line.
+- `< This is line 2.`: Original content in `file1.txt`.
+- `---`: Separator.
+- `> This is a modified line.`: Modified content in `file2.txt`.
+
+
+
+## 2. Side-by-Side Format (-y):
+```bash
+diff -y file1.txt file2.txt
+```
+
+**Output:**
+```plaintext
+This is line 1.                              | This is line 1.
+This is line 2.                              | This is a modified line.
+This is line 3.                              | This is line 3.
+```
+
+**Explanation:**
+- `-y`: Presents a side-by-side comparison.
+- `|`: Separates the lines from the two files.
+
+## 3. Ignore Whitespace Changes (-w):
+```bash
+diff -w file1.txt file2.txt
+```
+
+**Output:**
+```plaintext
+2c2
+< This is line 2.
+---
+> This is a modified line.
+```
+
+**Explanation:**
+- `-w`: Ignores whitespace changes.
+----
+
+
