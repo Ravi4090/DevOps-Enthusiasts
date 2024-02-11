@@ -8,7 +8,7 @@
 - Command mode is for navigation and executing commands, while insert mode is for inserting text.
 
 ### Navigation and Shortcuts:
-#### Switching Modes:
+#### Switching Modes: 
 - Press `Esc` to enter command mode from insert mode.
 - Press `i` to enter insert mode from command mode.
 

@@ -1,5 +1,5 @@
 
-# Module 4 : Important Git Commands
+# Module 5 : Important Git Commands
 
 ## 1. `init`
 
@@ -132,6 +132,52 @@
   $ git checkout feature_branch
   ```
   Switches to the "feature_branch" in the repository.
+
+
+  ------------
+
+
+  Certainly! Here's the content converted into Git Markdown:
+
+## 14. `git config --global user.name "Your Name"`
+
+- **Usage**: `git config --global user.name "Your Name"`
+- **Purpose**: Sets your global Git username.
+- **Example**:
+  ```bash
+  $ git config --global user.name "John Doe"
+  ```
+  Configures Git to associate commits with the username "John Doe" globally.
+
+## 15. `git config --global user.email "email@example.com"`
+
+- **Usage**: `git config --global user.email "email@example.com"`
+- **Purpose**: Sets your global Git email.
+- **Example**:
+  ```bash
+  $ git config --global user.email "john.doe@example.com"
+  ```
+  Configures Git to associate commits with the email "john.doe@example.com" globally.
+
+### Listing Remote Repositories:
+
+- **Command**: `git remote`
+- **Purpose**: Lists all remote repositories linked to the local project.
+- **Example**:
+  ```bash
+  $ git remote
+  ```
+  Displays the names of remote repositories associated with the current Git project.
+
+- **Command**: `git remote -v`
+- **Purpose**: Lists all remote repositories with more detail.
+- **Example**:
+  ```bash
+  $ git remote -v
+  ```
+  Displays detailed information about remote repositories associated with the current Git project.
+
+
 
 These Git commands form the core set needed for version control and collaborative software development. Understanding and mastering these commands are crucial for efficient and effective use of Git.
 
