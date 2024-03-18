@@ -1,4 +1,4 @@
-# Docker Overview for Beginners
+# Docker Overview
 
 Docker is a popular platform for developing, shipping, and running applications in a consistent and isolated environment. It utilizes containerization technology to package applications and their dependencies into standardized units called containers. These containers can then be easily deployed across different environments without worrying about compatibility issues.
 
