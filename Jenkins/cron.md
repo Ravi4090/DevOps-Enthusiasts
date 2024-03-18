@@ -54,4 +54,3 @@ In these examples:
 - `/path/to/command` represents the command or script to be executed.
 
 Cron jobs are managed using the `crontab` command. You can edit the cron jobs for the current user by running `crontab -e` in the terminal. This opens a text editor where you can specify your cron jobs.
-```  
