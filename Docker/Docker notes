@@ -1,0 +1,189 @@
+21 March 2024
+
+DOCKER 
+
+CONTAINERS ARE ISOLATED ENVIRONMENTS,IN WHICH APPLICATION IS RUNNUNG AND THESE PROCESSES HAVE THEIR OWN NETWORK,STORAGE AND IP ADDRESS. RESOURCES ARE ALLOCATED AT RUNTIME, THIS ARE LIGHTWEIGHT INSTANCES.
+
+THIS OVERCOMES FIXED ALLOCATED RESOURCES,TIME CONSUME DURING SCALING UP, AND HEAVY WEIGHT.
+
+DOCKER IS A TOOL TO CREATE PACKAGE AND RUN. DOCKER IS A CONTAINER TOOL.
+WHEN DEVELOPER RUN A CODE AND SENT TO TEST AND PROD ,IT FAILED IN THEIR SYSTEM DUE TO CHANGES IN VERSIONAND OTHER SYSTEM RELATED CHANGES. SO WHITH THE HELP OF DOCKER A PACKAGE WITH APP FILE,SERVER REQ.,JAVA,OS REQ. CAN BE MADE AND SHARED TO TEST/PROD ENVIRONMENTS. WITH THIS PACKAGE THERE WOULD BE NO FAILURES , AND IT WILL WORK IN ANY SYSTEM WITH THE PACKAGE,IT WILL WORK SEAMLESSLY.
+PACKAGING APPLICATION WITH REQ. LIKE LIBRARIES AND OTHER DEPENDENCIES, AS ONE PACKAGE. TO EXECUTE IN EFFICIENT AND HASSLE FREE WAY.
+
+
+-------ARCHITECTURE---------
+DOCKER IS OPEN SOURCE, IT HAS COMMUNITY AND ENTERPRISE VERSION.
+>DOCKER HUB IS A PUBLIC REGISTRY.
+>IN DOCKER IF WE RUN AN IMAGE(COLLECTION OF BINARIES,LIBRARIES NEEDED FOR YOUR APPLICATION  TO RUN,IT CANNOT BE EDITED), IT WILL CREATE A CONTAINER.
+
+2TYPES OF IMAGES ARE:
+BASE IMAGES
+CUSTOM IMAGES
+
+
+WHAT IS CONTAINER?
+CONTAINER IS A RUNNING INSTANCE OF AN IMAGE IS A CONTAINER
+THEY ARE LIGHT WEIGHT 
+CAN BE CREATED/SCALED/DELETED WITH A SINGLE COMMAND. 
+CONTAINERS ARE USED FOR DEPLOYING YOUR APLLICATIONS.
+CONTAINER IS AN ISOLATED ENVIRONMENT WHICH HAS APPLICATION AND DEPENDENCIES , HAVING THEIR OWN NETWROK AND STORAGE
+
+================================================
+
+FLOW OF CONTAINER CREATION : DOCKER HUB>(PULL)>DOCKER HOST>(RUN)>CONTAINER
+
+================================================
+
+CREATE AN INSTANCE AND RUN :
+
+yum install docker -y
+
+systemctl start docker
+
+systemctl status docker
+
+#search an image from hub.docker.com
+
+docker images
+
+docker pull ubuntu                               #will pull latest one from docker hub
+
+or docker pull ubuntu:20.04(specifying tag)
+
+or docker pull registry/reponame/customimage     #from own repo
+
+docker ps -a (for process details)
+
+docker rmi ubuntu (to remove image)
+
+docker rmi ubuntu ubuntu:20.04     #to remove multiple
+
+docker rm -f <containerID/name>    #to remove container
+
+docker rm -f $(docker ps -aq)      #for query and remove all container
+
+docker container rename <cont> <cont2>            #to rename
+
+docker run ubuntu         #run can perform both pull and run to give a container
+  
+ps -ef
+
+docker exec <contname> <command> like cat/etc/os-release     #to execute from host terminal #for foreground
+
+docker exec -it <contname> <command>              #for detached
+------------------------------------------------
+
+**if status is exited then :
+docker start container <container name>   #to start the container
+docker stop container <container name>   #to stop the container
+ 
+------------------------------------------------
+docker run command options:
+
+docker run --name <name> <image>          #to give a name to container while run
+
+docker run --name <name> cont01 -it ubuntu     #foreground mode
+
+cat /etc/os-release                       #to get into container from actual instance
+
+docker attach <container name>            #to get into container
+
+docker run --name <name> cont01 -d nginx  #detached mode 
+
+press ctrl p q                            #to get out of container, container will be running
+
+docker ps -a
+
+exit                                      #to come out and stop container
+
+docker start container <container name>   #to start the container
+
+docker stop container <container name>   #to stop the container
+
+
+
+
+
+
+------------------------------------------------
+
+Modes on container
+ 
+1)Foreground mode(user will be attached to terminal)
+Foreground Mode:(-it)
+here : i=interactive , t=terminal
+
+Whenver we execute docker run command with foreground mode (-it):
+
+ > A container will be created
+ > Container will be up & running
+ > user will be logged on to the container (attached to the terminal of the container)
+
+# docker run -it --name cont1 ubuntu
+
+You will be on the container.
+
+Comeout of the container --> keep the container running
+
+Execute CTL pq
+
+Comeout of the container -->  the container should be exited/Stopped
+
+execute  = > exit
+
+Go back into the container OR attach to the terminal of a running container again:
+
+# docker attach containername/id
+
+Restart a exited container:
+
+# docker start containername/id
+
+
+Delete a container:
+
+ docker rm -f cont1
+
+Delete Images and stopped containers:
+
+ docker system prune --all
+
+Using docker command run an webserver image -> launch a container--> container status should be up & running
+
+
+2)Detached mode(user will not be attached to terminal)(recommended) 
+Detached Mode:(-d)
+
+
+Whenver we run docker command with detached mode:
+
+ > A container will be created
+ > Container will be up & running
+ > user will not be attached to the terminal of to the container
+
+# docker run --name n1 -d nginx
+
+Attach to the terminal of the container from the host machine:
+
+
+# docker exec -it <containername> command
+
+# docker exec -it web /bin/bash
+
+
+
+------------------------------------------------
+
+for ubuntu its:(for installation)
+sudo apt update
+
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+apt-cache policy docker-ce
+
+sudo apt install docker-ce -y
+
+sudo systemctl status docker
