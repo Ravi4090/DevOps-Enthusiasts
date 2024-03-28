@@ -1,0 +1,421 @@
+=================================================================================================
+21/03/2024
+=================================================================================================
+
+DOCKER 
+
+CONTAINERS ARE ISOLATED ENVIRONMENTS,IN WHICH APPLICATION IS RUNNUNG AND THESE PROCESSES HAVE THEIR OWN NETWORK,STORAGE AND IP ADDRESS. RESOURCES ARE ALLOCATED AT RUNTIME, THIS ARE LIGHTWEIGHT INSTANCES.
+
+THIS OVERCOMES FIXED ALLOCATED RESOURCES,TIME CONSUME DURING SCALING UP, AND HEAVY WEIGHT.
+
+DOCKER IS A TOOL TO CREATE PACKAGE AND RUN. DOCKER IS A CONTAINER TOOL.
+WHEN DEVELOPER RUN A CODE AND SENT TO TEST AND PROD ,IT FAILED IN THEIR SYSTEM DUE TO CHANGES IN VERSIONAND OTHER SYSTEM RELATED CHANGES. SO WHITH THE HELP OF DOCKER A PACKAGE WITH APP FILE,SERVER REQ.,JAVA,OS REQ. CAN BE MADE AND SHARED TO TEST/PROD ENVIRONMENTS. WITH THIS PACKAGE THERE WOULD BE NO FAILURES , AND IT WILL WORK IN ANY SYSTEM WITH THE PACKAGE,IT WILL WORK SEAMLESSLY.
+PACKAGING APPLICATION WITH REQ. LIKE LIBRARIES AND OTHER DEPENDENCIES, AS ONE PACKAGE. TO EXECUTE IN EFFICIENT AND HASSLE FREE WAY.
+
+
+-------ARCHITECTURE---------
+DOCKER IS OPEN SOURCE, IT HAS COMMUNITY AND ENTERPRISE VERSION.
+>DOCKER HUB IS A PUBLIC REGISTRY.
+>IN DOCKER IF WE RUN AN IMAGE(COLLECTION OF BINARIES,LIBRARIES NEEDED FOR YOUR APPLICATION  TO RUN,IT CANNOT BE EDITED), IT WILL CREATE A CONTAINER.
+
+2TYPES OF IMAGES ARE:
+BASE IMAGES
+CUSTOM IMAGES
+
+
+WHAT IS CONTAINER?
+CONTAINER IS A RUNNING INSTANCE OF AN IMAGE IS A CONTAINER
+THEY ARE LIGHT WEIGHT 
+CAN BE CREATED/SCALED/DELETED WITH A SINGLE COMMAND. 
+CONTAINERS ARE USED FOR DEPLOYING YOUR APLLICATIONS.
+CONTAINER IS AN ISOLATED ENVIRONMENT WHICH HAS APPLICATION AND DEPENDENCIES , HAVING THEIR OWN NETWROK AND STORAGE
+
+================================================
+
+FLOW OF CONTAINER CREATION : DOCKER HUB>(PULL)>DOCKER HOST>(RUN)>CONTAINER
+
+================================================
+
+CREATE AN INSTANCE AND RUN :
+
+yum install docker -y
+
+systemctl start docker
+
+systemctl status docker
+
+#search an image from hub.docker.com
+
+docker images
+
+docker pull ubuntu                               #will pull latest one from docker hub
+
+or docker pull ubuntu:20.04(specifying tag)
+
+or docker pull registry/reponame/customimage     #from own repo
+
+docker ps -a (for process details)
+
+docker rmi ubuntu (to remove image)
+
+docker rmi ubuntu ubuntu:20.04     #to remove multiple
+
+docker rm -f <containerID/name>    #to remove container
+
+docker rm -f $(docker ps -aq)      #for query and remove all container
+
+docker container rename <cont> <cont2>            #to rename
+
+docker run ubuntu         #run can perform both pull and run to give a container
+  
+ps -ef
+
+docker exec <contname> <command> like cat/etc/os-release     #to execute from host terminal #for foreground
+
+docker exec -it <contname> <command>              #for detached
+docker system prune --all    #to delete all
+------------------------------------------------
+
+**if status is exited then :
+docker start container <container name>   #to start the container
+docker stop container <container name>   #to stop the container
+ 
+------------------------------------------------
+docker run command options:
+
+docker run --name <name> <image>          #to give a name to container while run
+
+docker run --name cont01 -it ubuntu     #foreground mode **and**   
+cat /etc/os-release   #to get into container from actual instance
+
+docker attach <container name>            #to get into container
+
+docker run --name cont01 -d nginx  #detached mode 
+
+press ctrl p q                            #to get out of container, container will be running
+
+docker ps -a
+
+exit                                      #to come out and stop container
+
+docker start container <container name>   #to start the container
+
+docker stop container <container name>   #to stop the container
+
+
+
+------------------------------------------------
+
+Modes on container
+ 
+1)Foreground mode(user will be attached to terminal)
+
+2)Detached mode(user will not be attached to terminal)(recommended) 
+
+
+
+
+
+
+------------------------------------------------
+
+for ubuntu its:(for installation)
+sudo apt update
+
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+apt-cache policy docker-ce
+
+sudo apt install docker-ce -y
+
+sudo systemctl status docker
+
+------------------------------------------------
+**In our example we have two containers , one is webserver and another one is a OS , OS has a shell like /bin/bash or sh in this case we use attach  , but webserver also has it but not directly its is inside it or below it on top of it it has webserver soo if we want to access that shell of that web container we use exec right**
+
+
+
+
+nginx is ingress load balancer in kubernetes
+
+docker system prune   # deletes all non containered images
+
+
+=================================================================================================
+26/03/2024
+=================================================================================================
+
+-----docker run -d --name web nginx------(detached mode)
+-----docker run -it --name web nginx------(foreground)ss
+docker run -d -name web1 -p 8280:80 nginx     #CHANGINE PORT/port forwarding/mapping in docker
+docker run -d -name web1 -P httpd nginx     #docker will do random portingss
+
+Also, port mapping cannot be removed , delete and create container again.NO PORT MAPPING FOR OS CONTAINERS.BASE IMAGE ARE GIVEN IN DOCKER HUB , CUSTOM IMAGES ARE CREATED BY US.
+
+apt-get update
+apt-get install tree-y     #to install a package
+ctrl p q #to get out of container
+docker commit <contname> <imagename>     #convert container to image
+
+docker tag myimage01 dockerhubaccount/myimage01    #to change image name
+docker tag oldimagename dockerhubaccount/imagename
+
+docker push <imagename>    #to push to registry but will fail
+docker push <repo/imagename>    #pushing changed imagename to registry
+FROM DOCKER HOST LOGIN TO DOCKER HUB, check for things on your account.
+
+
+
+__________________________________________________________________
+docker push sonal04/myimage01
+Demo: Convert a container into a Custom Image 
+============================================================
+Step 1: We will create an Ubuntu(OS) container 
+
+Step 2: We will go inside the container (-it)
+
+Step 3: We will install some package on the container 
+
+step 4: come out of container 
+
+step 5: Commit a container to an Image ==> our own image 
+
+docker commit containername imagename 
+
+Step 6: Push the image to docker Hub -> our own registry 
+
+docker push myimage01
+
+docker push sonal04/myimage01
+ 
+Step 7: From Docker Host login to docker hub
+
+Login with your Docker ID to push and pull images from Docker Hub
+
+Step 8: Change Image name so that we can push it into our own docker hub repository 
+
+docker tag olsImagename dockerhubaccount/imagename
+
+docker tag myimage01 sonal04/myimage01
+
+Step 9: Push the image to docker Hub -> our own registry 
+
+docker push sonal04/myimage01
+__________________________________________________________________
+
+
+
+DOCKER FILE IS A SIMPLE TEXT FILE/MANIFEST FILE OF SET OF INSTRUCTIONS OF WHAT YOU WANT ON CONTAINER.
+
+
+FROM: BASE IMAGE OVER WHICH WE WILL DO CUSTOMIZATION.THIS IS MANDATORY AND NOT REPEATED.
+
+RUN:WITH THIS KEYWORD WE CAN PASS ANY LINUX COMMAND THAT HAS TO BE PRE-EXECUTED ON THE CONTAINER.
+
+COPY : COPY A FILE FROM HOST MACHINE TO CONTAINER DIRECTORY
+
+ADD: COPY A FILE FROM HOST MACHINE TO CONTAINER DIRECTORY
+COPY A FILE FROM REMOTE SERVER TO CONTAINER DIRECTORY
+
+
+
+MAKE A DIRECTORY AND INDEX.HTML
+CREATE ONE MORE FILE
+vi
+
+FROM ubuntu
+LABEL maintainer="StarAgile"
+RUN apt-get update
+RUN apt-get install nginx-y
+COPY index.html /var/www/html/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+here, -g is global , and daemon off; is to kepp running in background
+save and exit
+
+docker build -t mynginx .
+docker build -t mynginx:01 .
+
+
+
+__________________________________________________________________
+
+Docker Volumes:
+
+It is a concept in which we preserve the data of container in the volumes created on docker host
+
+Whenver a containe ris deleted, the data in the container is also lost. In order to overcome this problem, we have docker volumes
+
+Volumes needs to be mounted on the container directory. whatever is there in the container directory will be preserved on the volume directory
+
+Volume mapping has to be done, during container runtime.
+
+Named volumes
+
+1. Create a docker volume that will preserve the data of a container
+
+> Create a named volume
+
+# docker volume ls
+# docker volume create myvol
+
+> where is the volume created
+
+docker volume inspect myvol #will show volume directory /var/lib/docker/volumes/myvol/_data
+
+
+> mount the volume on the container directory
+
+ docker run -it --name cont1 -v myvol:/tmp ubuntu    #naming container and creating volume
+or
+ docker run -it -v myvol:/tmp ubuntu  #not naming conatiner but creating volume
+
+> preserve data from contaienr to volume
+
+create some files in container and come out of container
+
+> delete container.. data will be there in volume directory
+
+# docker rm -f cont1
+
+# cd /var/lib/docker/volumes/myvol/_data
+
+
+2. Place files from volume on to a container
+
+> go to volume directory, it will have some files
+
+> create a container and mount the volume
+
+docker run -it --name cont1 -v myvol:/tmp ubuntu
+
+> you will observe volume data is there on contaienr sdirectory
+
+docker volume rm myvol #to delete the volume , all data is lost/deleted.
+
+
+============REFERENCE========================================================
+
+[root@ip-172-31-9-11 ~]# docker volume create myvol
+myvol
+[root@ip-172-31-9-11 ~]# docker volume ls
+DRIVER    VOLUME NAME
+local     myvol
+[root@ip-172-31-9-11 ~]# docker run -it --name cont1 -v myvol:/tmp ubuntu
+root@fb6fc9a252a8:/#
+root@fb6fc9a252a8:/# cd /tmp
+root@fb6fc9a252a8:/tmp# touch contfile1
+root@fb6fc9a252a8:/tmp# ls
+contfile1
+root@fb6fc9a252a8:/tmp# [root@ip-172-31-9-11 ~]#
+[root@ip-172-31-9-11 ~]#
+[root@ip-172-31-9-11 ~]# cd /var/lib/docker/volumes/myvol
+[root@ip-172-31-9-11 myvol]# ls
+_data
+[root@ip-172-31-9-11 myvol]# cd _data
+[root@ip-172-31-9-11 _data]# ls
+contfile1
+[root@ip-172-31-9-11 _data]#
+=====================================================================================
+
+
+=====================================================================================
+28/03/2024
+=====================================================================================
+
+ENV pkg1='git'
+ENV pkg2='tomcat'
+
+used in docker file after FROM Command to define things like git and tomcat... to avoid repeting while writing the rest fo the file.
+
+
+
+YAML   --check recording of 27/03/2024
+
+**case and space sensitive**
+key : storing multiple values/ array
+
+
+DOCKER NETWORKS
+
+docker network ls:
+all containers created will run in type bridge under this
+we can create networks and create containers in each network of type bridge and, also place conatiners in both containers.
+
+
+DOCKER COMPOSE
+run installation command 
+docker-compose --version
+mkdir composedemo
+cd composedemo
+vim docker-compose.yml #docker-compose name should be same(mandatory) , cannit be chnaged
+*first database container should be created and then application containers and one container one port number , OS doesnt require port mapping coz it cant be accesed from web*
+
+
+version: '3'
+services:
+ compose-test:                   #container name
+  image: centos:7                #image
+  networks:
+   - compnet                     #custom network name (bridge)
+  command: sleep infinity        #command to be run
+  depends_on:
+   - compose-db               #first compose db will be created , if failed even compose test will not be created.
+compose-db:                   #container name
+  image: redis               #image
+  networks:
+   - compnet                     #custom network name (bridge)
+  ports:
+  - 6379(system port):6379(container port)    #port mapping
+
+
+
+
+docker-compose up    #will pull image,create network,database containers and containers in detached mode.
+docker-compose ps      #to get list of containers created using docker compose
+docker-compose exec -it compose-test /bin/bash
+and then install netcat
+yum install nc -y   #to install netcat
+and then connect 
+nc compose-db 6379     #to connect to database container
+docker-compose down   #to stop container and delete and delete networks
+docker-compose up -d #will create again
+
+****netcat (often abbreviated to nc) is a computer networking utility for reading from and writing to network connections using TCP or UDP****
+ping
+ +PONG
+set name sonal     #giving inputs using sets
++OK
+set tool docker
++OK
+get name
+sonal
+get tool
+docker
+ctrl c to close the connection
+ctrl p q to come out
+
+
+
+
+
+
+ORCHESTRATION IS MANAGING THE LIFECYCLE OF A CONTAINER,...
+DOCKER SWARM
+
+Swarm cluster is a set of VM's with container tool(docker) installed on them, they are connected to each other
+
+Initialize swarm in one of the vm's, it will generate a token.
+Copy token on each of the vm's ,they will act as workers , their main role is to keep the containers running 
+
+docker swarm init    #initilizing swarm
+docker swarm join-token worker    #copy and run in other nodes
+
+docker node ls #to get of vm's connected in swarm,run in main swarm only
+
+docker service create --name mysvc1 --replicas 5 -p 8280:80 nginx     #will create 5 containers of image nginx in port 8280 and distribute among workers
+docker service ls  
+
