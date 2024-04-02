@@ -1,0 +1,198 @@
+KUBERNETES
+
+
+kubectl get nodes  #to get list & status of nodes
+
+**pod is the smallest deployable unit, it protects the node. pod can be created only after removing the taint created in worker nodes**
+
+kubectl run pod1 --image nginx #to create a single pod
+kubectl describe pod pod1
+kubectl delete pod pod1
+kubectl get pods   #to get pods list
+kubectl get pods -o wide #detailed info. like ip address, vm
+
+NOTE:if we don't specify command in file , pod will not be running incase of ubuntu and os containers.
+
+
+scheduler >> api server >> kubelet (will take help from docker) >> api server is informed >> etcd stores info. about cluster >> controller manager will manage the scaling/replication/managing health of nodes.
+
+INSTALLATION COMMANDS====
+
+Install Kubernetes Using Script
+Step1: On Master Node Only
+## Install Docker
+sudo wget https://raw.githubusercontent.com/lerndevops/labs/master/scripts/installDocker.sh -P /tmp
+sudo chmod 755 /tmp/installDocker.sh
+sudo bash /tmp/installDocker.sh
+sudo systemctl restart docker.service
+
+## Install CRI-Docker
+sudo wget https://raw.githubusercontent.com/lerndevops/labs/master/scripts/installCRIDockerd.sh -P /tmp
+sudo chmod 755 /tmp/installCRIDockerd.sh
+sudo bash /tmp/installCRIDockerd.sh
+sudo systemctl restart cri-docker.service
+
+## Install kubeadm,kubelet,kubectl
+sudo wget https://raw.githubusercontent.com/lerndevops/labs/master/scripts/installK8S.sh -P /tmp
+sudo chmod 755 /tmp/installK8S.sh
+sudo bash /tmp/installK8S.sh
+
+# Validate 
+
+   docker -v
+   cri-dockerd --version
+   kubeadm version -o short
+   kubelet --version
+   kubectl version --client
+
+## Initialize kubernetes Master Node
+ 
+   sudo kubeadm init --cri-socket unix:///var/run/cri-dockerd.sock --ignore-preflight-errors=all
+
+sudo mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+   ## install networking driver -- Weave/flannel/canal/calico etc... 
+
+   ## below installs calico networking driver 
+    
+   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/calico.yaml
+
+   # Validate:  kubectl get nodes
+
+To schedule the pods on the Master machine 
+
+$ kubectl get nodes
+
+Copy the Nodename : ip-172-31-28-125
+
+$ kubectl describe nodes <nodeName>
+
+$ kubectl describe nodes ip-172-31-28-125
+
+Copy the taints
+
+node-role.kubernetes.io/master:NoSchedule
+
+
+We need to remove the taints, so that pods can be scheduled on the master
+
+To remove the taint
+
+$ kubectl taint node <node_name> <taintname>-
+
+$ kubectl taint node ip-172-31-28-125 node-role.kubernetes.io/master:NoSchedule-
+
+
+kubectl taint node   ip-172-31-15-3 node-role.kubernetes.io/control-plane:NoSchedule-
+
+
+Taint will be removed.
+
+
+
+====================================================================
+2/4/2024
+
+
+node : where cont are deployed and run
+kubelet : runs on each node and communicates with the master node.
+
+
+K8s is written in a file called manifest file . this file has code writeen in yaml. code is case sensitive
+
+there are 4 main sections:kins,apiversion,metadata,spec .
+
+
+kind: Pod        #here we write the kind of object that we want to create
+apiversion: apps/v1    #standard/mandatory
+metadata:
+  name: pod1 #give a name to the pod
+  labels:    #used to group similar pods
+    author: sonal
+    type: webserver
+spec:  #here we specify what we want in the container
+ containers:
+  - image: nginx
+    name: c1        #name of the container
+  - image: tomcat
+    name: c2        #name of the container
+    command: ["bash", "c", "sleep 6000"] 
+
+
+#same images cannot be created in the same pod, as they use same port , same vm .
+
+make dir and change to directory
+vim pod-definition.yml
+kubectl create -f pod-definition.yml
+kubectl get pods -o wide 
+kubectl delete pod pod1
+kubectl delete pod --all
+kubectl delete pod pod1 pod2 pod3
+
+
+REFERENCE:  https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.29/#-strong-api-groups-strong-
+
+
+>>>Deployment creates replicas of pods ,scale up and down,roll out new image-->> delete old containers and creating new container with new image
+
+FILE FOR DEPLOYMENT ;
+
+vim deployment.yml
+
+
+kind: Deployment        #here we write the kind of object that we want to create
+apiversion: apps/v1    #standard/mandatory
+metadata:
+  name: mydeploy
+spec:  
+  replicas: 3    #indicates how many replicas should be created
+  selector:   #here we are writing the query which will be  used to scale up and scale down the pods
+   matchLabels:
+    type: webserver
+  template:       #this is pod template, using this it will create pods
+    metadata:
+      name: #not req. will be assigned random names
+      labels:    #used to group similar pods
+        author: sonal
+        type: webserver
+    spec:  #here we specify what we want in the pod
+ containers:
+  - image: nginx
+    name: c1        #name of the container
+
+
+
+
+kubectl create -f mydeploy.yml
+kubectl scale deployment mydeploy  --replicas 10
+kubectl get pods -1 type=webserver 
+kubectl get all
+vim pod-demo.yml  
+kubectl describe pod <podname>
+kubectl delete pod --all
+
+
+
+=================REFERENCE==================================
+kind: Pod  # kubectl api-resources
+apiVersion: v1
+metadata:
+  name: multi-cont-pod2
+  namespace: default
+  labels:  # are mandatory # helps to indentify a group of pods in cluster # in kube if you do not provide a label kube will assing one automatically
+    role: dev  # here both key & value are your choice
+spec:
+  #restrtPolicy: Always # Never
+  containers:
+    - name: cont1
+      image: httpd
+    - name: cont2
+      image: tomcat
+    - name: ucont
+      image: ubuntu
+      command: ["bash", "-c", "sleep 6000"]
+
+INGRESS,HPA,PERSISTENT VOLUME
+============================================================
