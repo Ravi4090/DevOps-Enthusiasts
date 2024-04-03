@@ -5,11 +5,11 @@ kubectl get nodes  #to get list & status of nodes
 
 **pod is the smallest deployable unit, it protects the node. pod can be created only after removing the taint created in worker nodes**
 
-kubectl run pod1 --image nginx #to create a single pod
+kubectl run pod1 --image nginx               #to create a single pod
 kubectl describe pod pod1
 kubectl delete pod pod1
-kubectl get pods   #to get pods list
-kubectl get pods -o wide #detailed info. like ip address, vm
+kubectl get pods                             #to get pods list
+kubectl get pods -o wide                     #detailed info. like ip address, vm
 
 NOTE:if we don't specify command in file , pod will not be running incase of ubuntu and os containers.
 
@@ -142,32 +142,33 @@ FILE FOR DEPLOYMENT ;
 vim deployment.yml
 
 
-kind: Deployment        #here we write the kind of object that we want to create
-apiversion: apps/v1    #standard/mandatory
+kind: Deployment                    #here we write the kind of object that we want to create
+apiversion: apps/v1                     #standard/mandatory
 metadata:
   name: mydeploy
 spec:  
-  replicas: 3    #indicates how many replicas should be created
-  selector:   #here we are writing the query which will be  used to scale up and scale down the pods
+  replicas: 3                      #indicates how many replicas should be created
+  selector:                     #here we are writing the query which will be  used to scale up and scale down the pods
    matchLabels:
     type: webserver
-  template:       #this is pod template, using this it will create pods
+  template:                               #this is pod template, using this it will create pods
     metadata:
-      name: #not req. will be assigned random names
-      labels:    #used to group similar pods
+      name:                              #not req. will be assigned random names
+      labels:                              #used to group similar pods
         author: sonal
         type: webserver
-    spec:  #here we specify what we want in the pod
- containers:
-  - image: nginx
-    name: c1        #name of the container
-
+    spec:                     #here we specify what we want in the pod
+     containers:
+      - image: nginx
+        name: c1                            #name of the container
+      - image: nginx
+        name: c1                            #name of the container
 
 
 
 kubectl create -f mydeploy.yml
 kubectl scale deployment mydeploy  --replicas 10
-kubectl get pods -1 type=webserver 
+kubectl get pods -1 type=webserver     #to get pods of specific types
 kubectl get all
 vim pod-demo.yml  
 kubectl describe pod <podname>
@@ -196,3 +197,150 @@ spec:
 
 INGRESS,HPA,PERSISTENT VOLUME
 ============================================================
+
+
+
+kubectl exec -it <deployname> -c c1 -- bash
+ here, -c c1 specifying the container is must, as we cannot connect to multiple containers at the same time.
+
+kubectl delete deployment mydeploy2
+kubectl get deployment -o wide
+
+
+
+
+kind: Deployment                    #here we write the kind of object that we want to create
+apiversion: apps/v1                     #standard/mandatory
+metadata:
+  name: mydeploy
+spec:  
+  replicas: 3
+  minReadySeconds: 10 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:                     #here we are writing the query which will be  used to scale up and scale down the pods
+   matchLabels:
+    type: webserver
+  template:                               #this is pod template, using this it will create pods
+    metadata:
+      name:                              #not req. will be assigned random names
+      labels:                              #used to group similar pods
+        author: sonal
+        type: webserver
+    spec:                     #here we specify what we want in the pod
+ containers:
+  - image: nginx
+    name: c1                            #name of the 
+
+
+
+kubectl set image deployment kubeserve aap=leaddevops/kubeserve:v2  #just change the version to update the images in deployment, also if u want to rollback to a specific version use the same command
+
+kubectl set image deployment kubeserve aap=leaddevops/kubeserve:v2 --record v2
+
+kubectl get pods #to know the status of deployment
+
+kubectl rollout history deployment kubeserve     #to see rollout history
+
+kubectl rollout undo deployment kubeserve
+
+kubectl rollout history deployment kubeserve --revision=1
+
+
+
+
+
+NODE PORT (SERVICE OBJECT)
+
+NODE, CONTAINER AND SERVICE PORT(LB)
+
+kubectl get pods --show-labels   #make note of label
+
+
+kind: Service
+apiVersion: v1
+metadata:
+ name: mysvc
+spec: 
+ type: Nodeport
+ selector:
+ app: kubeserve
+ports:
+ - targetPort: 80
+   port: 80
+   nodePort: 30009
+
+
+===for clusterip===
+
+kubectl get endpoints
+
+
+kind: Service
+apiVersion: v1
+metadata:
+ name: mysvc
+spec: 
+ type: ClusterIP
+ selector:
+ tyoe: webserever
+ports:
+ - targetPort: 80
+   port: 80
+   
+
+
+run -it exec command for any os pod
+and run the following
+
+curl mysvc or curl <podname>
+
+
+
+pipeline{
+    
+    tools{
+        maven 'mymaven'
+    }
+    
+    agent any
+    
+    stages{
+        stage('Clone Repo')
+        {
+            steps{
+                git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+            }
+        }
+        
+        stage('Build Code')
+        {
+            steps{
+               sh 'mvn package'
+            }
+        }
+        
+        stage('Build Docker Image'){
+            steps{
+                sh 'cp /var/lib/jenkins/workspace/DockerAssignmentJob/target/addressbook.war .'
+                sh 'docker build -t myaddressbook .'
+                
+            }
+        }
+        
+        stage('Deploy Image')
+        {
+            steps{
+                sh 'docker run -d -P myaddressbook'
+            }
+        }
+        
+    }
+}
+
+
+
+
