@@ -1,0 +1,240 @@
+08/04/2024
+
+ANSIBLE
+ITS A DEPLOYMENT AUTOMATION TOOL, USES PUSH APPROACH TO ACHIEVE ITS OBJECTIVES,BY MANAGING ALL THE SERVERS THROUGH ONE SINGLE MACHINE RUNNING.A PRODUCT OF REDHAT, ALWAYS INSTALLED ON A LINUX SERVER.
+
+>ANSIBLE CONTROL NODE - A MACHINE IN WHICH ANSIBLE IS INSTALLED.
+4 MAIN COMPONENTS - INVENTORY,PLAYBOOK,MODULES,ansible.cfg
+
+>MANAGED HOSTS/WORKER NODES/ANSIBLE HOST - VM's CONNECTED TO ANSIBLE CONTROLLER, NO ANSIBLE IS INSTALLED ON THIS VM's.FOR THIS REASON ANSIBLE IS CALLED AS AGENTLESS TOOLS. PYTHON is pre-requisite IN THESE VM's WHICH WILL BE BY DEFAULT IN LINUX MACHINES.
+
+SSH IS PROTOCOL THROUGH WHICH 2 LINUX MACHINES CONNECT WITH EACHOTHER , FOR WINDOWS IS WINRM.
+
+>>>INVENTORY - IS A SIMPLE TEXT FILE INWHICH WE WRITE DOWN THE IP ADDRESS/HOSTNAME OF REMOTE SERVERS WHERE WE HAVE TO DO CONFIGURATION.
+***HOST IS INVENTORY FILE, WHICH WILL COME BY DEFAULT, WE ADD ANSIBLE HOST VM's HERE USING PRIVATEIP(RECOMMENNDED)***
+***ANSIBLE COMMAND SHOULD BE IN THE SAME DIRECTORY AS ANSIBLE.CFG AND HOST FILE***
+
+>>>MODULES(4000+ modules are there in ansible) ARE SMALL PYTHON CODE THAT IS ALREADY WRITTEN IN ANSIBLE, AS ADMIN WE WILL USE THIS MODULE TO APPLY CHANGES ON REMOTE MODULES.
+
+LIKE copy(/source/file1/,/destination/file)
+
+>>>PLAYBOOK ANSIBLE CODE WILL BE WRITTEN IN PLAYBOOK.2 main things are hosts server, modules to be executed.WRITTEN IN YAML, WILL HAVE A SET OF PLAYS.
+
+PROCESS FLOW >>> ansible code(yaml) > python code(converted in controller machine) > will connect to and run it in host nodes > after changes >reports back to ansible controller > deletes python code in host nodes
+
+ansibl.cfg >>> IS A FILE , COMES PRE-INSTALLED WITH ANSIBLE.
+https://docs.ansible.com/ansible/2.8/modules/list_of_all_modules.html
+
+
+
+
+CONFIGURATION MANAGEMENT(MAKING CHANGES ON DIFF. SERVERS USING A TOOL)
+
+IS ABOUT BRINGING CONSISTENCY IN THE INFRASTRUCTURE,ENSURE THAT THE SYSTEM ,STATE,AND ENV IS KNOWN ,TRUSTED, AND AGREED UPON BY ALL.
+IT HELPS IN RECORDING ALL THE CHANGES MADE TO TEH SERVERS/IN THE SYSTEM.
+PROVIDE AN EASIER APPROACH TO MANAGE AND CONFIGURE THE INFRASTRUCTURE.
+ANSIBLE IS A CONFIGURATION MANAGEMENT TOOL.
+
+
+================================================steps on ANSIBLE CONTROLLER AND ON ALL ANSIBLE HOSTS========================================================
+
+vim sudo /etc/ansible/hosts > ADD IPADDRESS OF HOST VM's
+
+CREATE USER AND PASSWORD FROM ROOT USER
+adduser ansiuser
+passwd ansiuser
+
+vim sudo /etc/ssh/sshd_config
+scroll down till password autheticationa and set it to yes
+
+
+IN sudo /vim/sudoers   #simple linux file , it is a system file
+SCROLL DOWN TILL root 
+add 
+ANSIUSER ALL=NOPASSWD: ALL
+
+systemctl restart sshd
+
+
+_______________________________________________________________________________
+09/04/2024 
+
+Host file - will hv ip of vm's to be connected to ansible control node . Host file consists of all ip addresses of host machines where we have to do changes on target servers.
+
+Configuration File: The Ansible configuration file, often named ansible.cfg, is a settings file that allows you to customize how Ansible behaves. It contains various options that control things like the default inventory file location, connection settings, logging preferences, and more. You can use the configuration file to tailor Ansible to suit your specific needs and preferences. By default, Ansible looks for the configuration file in /etc/ansible/ansible.cfg on the control node, but you can specify a different location if needed.
+
+
+
+
+su - ansiuser
+ssh-keygen    (look in directory for public and private keys)
+
+
+>>>>>>>>SWITCH TO HOST NODE
+
+change hostname using-
+sudo hostname ansiblenode
+
+>>>>>>>>NOW FROM ANSIBLE CONTROL NODE
+ssh-copy-id -i ansiuser@<privateipofHOSTNODE>
+
+**WE CAN CONNECT TO HOST NODE FROM CONTROLLER NODE USING COMMAND SHOWN IN RESULTS AFTER RUNNING ABOVE COMMAND/ AFTER CONNECTING TO HOST NODE**
+
+cd /etc/ansible
+vim hosts
+add - 
+<hostgroup>
+hostnode privateip
+
+
+Running command on hostgroups from control node--
+
+ansible webserver -m ping
+or
+ansible all -m ping
+ansible webserver -m command -a "uptime"
+ansible webserver -m command -a "df-h"
+ansible webserver -m command -a "touch /tmp/file1"
+
+
+===PLAYBOOK WILL CONTAIN===
+
+HOST GROUP NAME 
+TASKS TO BE EXCUTED
+   -MODULES AND PARAMETERS
+
+
+>>>>>>>>PLAYBOOK
+
+
+sudo vim playbooktomcat.yml
+
+- name: Deployment of .war file on tomcat
+  hosts: webserver 
+  become: true
+  become_user: root
+  tasks:
+  - name: Install tomcat package on the host server
+    package: name=tomcat state=present
+  - name: Start teh tomcat server
+    service: name=tomcat state=started
+  - name: deploy .war file on tomcat server
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+  - name: Restart tomcat for deployment to complete
+    service: name=tomcat state=restarted
+
+ 
+Save and exit
+
+ansible-playbook playbooktomcat.yml --syntax-check    #to check for errors
+ansible-playbook playbooktomcat.yml 
+
+CHECK >> cd /usr/share/tomcat/webapps
+ls
+war file will be there
+
+
+
+>>>>>>HANDLERS
+
+sudo vim playbooktomcat.yml
+
+- name: Deployment of .war file on tomcat
+  hosts: webserver 
+  become: true
+  become_user: root
+  tasks:
+  - name: Install tomcat package on the host server
+    package: name=tomcat state=present
+  - name: Start the tomcat server
+    service: name=tomcat state=started
+  - name: deploy .war file on tomcat server
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+     notify: Restart tomcat for deployment to complete
+  - name: execute a command
+    command: hostname -s
+    notify: Print Status of command
+  handlers:
+  - name: Restart tomcat for deployment to complete
+    service: name=tomcat state=restarted
+  - name: Status of command
+    debug: msg="command executed succesfully"
+
+
+
+ 
+Save and exit
+
+ansible-playbook playbooktomcat.yml --syntax-check    #to check for errors
+ansible-playbook playbooktomcat.yml 
+**if same command is run second time it will check.if we edit yml file and one more task what will it do?
+it will check prev. tasks and intsall/start new task**
+ 
+
+
+
+>>>>>>>MODULES LIST
+PACKAGE MODULE >> IS USED TO INSTALL UNINSTALL OR UPGRADE 
+SERVICE MODUL >> IS USED TO START OR STOP A SERVICE
+GETURL MODULE >> WILL FETCH FILE FROM URL TO GIVEN DIRECTERY
+DEBUG MODULE >> WILL PRINT A MESSAGE FOR THE USER
+
+
+
+>>>>>>>>IF WE DO IT IN THIS FORMAT WE DONT HV TO RESTART?NO RESTART REQUIRED.
+sudo vim playbooktomcat.yml
+
+- name: Deployment of .war file on tomcat
+  hosts: webserver 
+  become: true
+  become_user: root
+  tasks:
+  - name: Install tomcat package on the host server
+    package: name=tomcat state=present
+  - name: deploy .war file on tomcat server
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+  - name: Start the tomcat server
+    service: name=tomcat state=started
+
+
+
+
+
+>>>>>>>TAGS
+
+sudo vim playbooktomcat.yml
+
+- name: Deployment of .war file on tomcat
+  hosts: webserver 
+  become: true
+  become_user: root
+  tasks:
+  - name: Install tomcat package on the host server
+    package: name=tomcat state=present
+    tags: install
+  - name: Start the tomcat server
+    service: name=tomcat state=started
+  - name: deploy .war file on tomcat server
+    get_url:
+     url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
+     dest=/usr/share/tomcat/webapps
+     notify: Restart tomcat for deployment to complete
+  - name: execute a command
+    command: hostname -s
+    notify: Print Status of command
+  handlers:
+  - name: Restart tomcat for deployment to complete
+    service: name=tomcat state=restarted
+  - name: Status of command
+    debug: msg="command executed succesfully"
+
+SAVE AND EXIT
+
+ansible-playbook playbooktomcat.yml --tags install
+
